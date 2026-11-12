@@ -1,0 +1,5 @@
+# R2b: interleaved SFT checkpoints: every 10th optimizer step also takes a strong anchor-SFT step.
+inherit: ../base.yaml
+name: interleaved_sft
+recipe:
+  anchor: {coef: 1.0, every: 10}

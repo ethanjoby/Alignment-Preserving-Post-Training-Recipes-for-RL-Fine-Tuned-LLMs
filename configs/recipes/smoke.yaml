@@ -1,0 +1,14 @@
+# Tiny end-to-end check (minutes on a laptop). Combine with any recipe via inherit order, e.g.
+#   apr-train configs/recipes/smoke.yaml            (baseline)
+#   apr-train configs/recipes/smoke_all.yaml        (every component on)
+inherit: ../base.yaml
+name: smoke
+data: {train_size: 32}
+grpo:
+  max_steps: 3
+  save_steps: 3
+  num_generations: 4
+  per_device_train_batch_size: 4
+  gradient_accumulation_steps: 1
+  max_completion_length: 256
+  logging_steps: 1

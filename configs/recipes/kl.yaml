@@ -1,0 +1,6 @@
+# R1: KL penalty to the initial policy. Sweep beta to trace the classic tradeoff curve:
+#   for b in 0.01 0.04 0.1 0.3; do apr-train configs/recipes/kl.yaml grpo.beta=$b name=kl_$b; done
+inherit: ../base.yaml
+name: kl_0.04
+grpo:
+  beta: 0.04

@@ -1,0 +1,8 @@
+# R3: general alignment reward on every task from an RM ensemble (mean - k*std), plus
+# a slice of HH-RLHF prompts so the alignment reward also sees non-math behaviour.
+inherit: ../base.yaml
+name: rm_ensemble
+data:
+  alignment_prompt_frac: 0.2
+recipe:
+  rm_ensemble: {weight: 0.3, k: 1.0}

@@ -1,0 +1,6 @@
+# R5-ablation: identical machinery, empty spec -> per-token KL-to-reference in the reward.
+# The gap between R5 and this run is what the conduct spec itself buys.
+inherit: ../base.yaml
+name: self_distill_nospec
+recipe:
+  self_distill: {coef: 0.05, clip: 5.0, spec: configs/empty_spec.md}

@@ -1,0 +1,7 @@
+# R4: targeted environments for the observed failure modes: reward honest abstention on
+# impossible problems, penalize fabrication, and a monitor penalty for grader gaming.
+inherit: ../base.yaml
+name: targeted_env
+recipe:
+  honesty_reward: {weight: 1.0}
+  hack_monitor: {weight: 1.0}

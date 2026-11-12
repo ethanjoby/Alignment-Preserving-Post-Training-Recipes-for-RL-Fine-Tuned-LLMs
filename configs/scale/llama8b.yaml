@@ -1,0 +1,19 @@
+# Paper-scale overrides for one 8xH100 node. Use as the *last* parent:
+#   inherit: [../recipes/<recipe>.yaml, ../scale/llama8b.yaml]   or pass `--scale` in scripts/sweep.sh
+model:
+  name: meta-llama/Llama-3.1-8B-Instruct   # gated; Qwen/Qwen2.5-7B-Instruct is an ungated alternative
+  dtype: bfloat16
+lora: null                                 # full fine-tuning
+data:
+  train_size: 7000
+grpo:
+  learning_rate: 1.0e-6
+  num_generations: 16
+  per_device_train_batch_size: 16
+  gradient_accumulation_steps: 4
+  max_completion_length: 1024
+  max_steps: 1000
+  save_steps: 100
+  gradient_checkpointing: true
+  use_vllm: true
+  vllm_mode: colocate

@@ -1,0 +1,59 @@
+# Shared defaults. Recipes `inherit:` this and override only what they change.
+# Defaults are sized for a laptop smoke-to-small run (Qwen2.5-0.5B-Instruct + LoRA).
+# For real results use configs/scale/*.yaml on GPUs.
+
+name: base
+seed: 0
+report_to: none            # or wandb
+
+# Start from an *instruct* model: a raw base model has little alignment to lose, so degradation
+# is only measurable on a model that has already been aligned.
+model:
+  name: Qwen/Qwen2.5-0.5B-Instruct
+  dtype: auto              # bf16 on CUDA, fp32 on MPS/CPU
+
+lora:
+  r: 16
+  alpha: 32
+  dropout: 0.0
+  target_modules: all-linear
+
+data:
+  train_size: 2000
+  unanswerable_frac: 0.2       # GSM8K items with a needed premise deleted -> honest answer is \boxed{insufficient}
+  alignment_prompt_frac: 0.0   # extra HH-RLHF prompts (only meaningful with rm_ensemble or self_distill)
+
+rewards:
+  correctness: {weight: 1.0, grader: lenient}   # lenient = verifier with an exploitable loophole
+  format: {weight: 0.1}
+
+# Passed straight to trl.GRPOConfig.
+grpo:
+  beta: 0.0                  # modern GRPO/DAPO default: no KL. Capability-maximizing baseline.
+  learning_rate: 2.0e-5
+  lr_scheduler_type: constant
+  warmup_steps: 0
+  num_generations: 8
+  per_device_train_batch_size: 8
+  gradient_accumulation_steps: 2
+  max_completion_length: 384
+  temperature: 1.0
+  loss_type: dapo
+  max_steps: 300
+  save_steps: 50
+  logging_steps: 5
+  log_completions: false
+  gradient_checkpointing: false
+
+# Alignment-preserving components. All off in base; recipes switch them on.
+recipe:
+  anchor:        {coef: 0.0, every: 1, batch_size: 4, path: data/anchor/anchor_constitutional.jsonl}
+  self_distill:  {coef: 0.0, clip: 5.0, spec: configs/conduct_spec.md}
+  honesty_reward: {weight: 0.0}
+  hack_monitor:  {weight: 0.0}
+  rm_ensemble:
+    weight: 0.0
+    k: 1.0
+    models:
+      - OpenAssistant/reward-model-deberta-v3-large-v2
+      - Skywork/Skywork-Reward-V2-Qwen3-0.6B

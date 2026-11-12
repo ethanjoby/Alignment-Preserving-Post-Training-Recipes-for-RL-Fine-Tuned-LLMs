@@ -1,0 +1,5 @@
+# R5: on-policy self-distillation from the initial model prompted with the conduct spec.
+inherit: ../base.yaml
+name: self_distill
+recipe:
+  self_distill: {coef: 0.05, clip: 5.0}

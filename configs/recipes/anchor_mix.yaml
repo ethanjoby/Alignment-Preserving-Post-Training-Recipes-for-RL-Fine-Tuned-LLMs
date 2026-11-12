@@ -1,0 +1,5 @@
+# R2a: continuous anchor-SFT mix (PPO-ptx style). Needs: apr-build-anchor (see README).
+inherit: ../base.yaml
+name: anchor_mix
+recipe:
+  anchor: {coef: 0.1, every: 1}

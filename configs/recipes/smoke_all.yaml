@@ -1,0 +1,10 @@
+inherit: [../base.yaml, smoke.yaml]
+name: smoke_all
+grpo: {beta: 0.01}
+data: {alignment_prompt_frac: 0.25}
+recipe:
+  self_distill: {coef: 0.05}
+  honesty_reward: {weight: 1.0}
+  hack_monitor: {weight: 1.0}
+  anchor: {coef: 1.0, every: 1, batch_size: 2, path: data/anchor/smoke_anchor.jsonl}
+  rm_ensemble: {weight: 0.3, models: [OpenAssistant/reward-model-deberta-v3-large-v2]}

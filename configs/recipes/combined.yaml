@@ -1,0 +1,10 @@
+# R6: the proposed recipe: light KL + self-distillation + targeted envs + interleaved anchor SFT.
+inherit: ../base.yaml
+name: combined
+grpo:
+  beta: 0.01
+recipe:
+  self_distill: {coef: 0.03}
+  honesty_reward: {weight: 1.0}
+  hack_monitor: {weight: 1.0}
+  anchor: {coef: 1.0, every: 10}
